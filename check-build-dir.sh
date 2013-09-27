@@ -1,5 +1,7 @@
 #!/bin/bash
 set -u
 set -e
-echo "* Checking build results in $1"
-egrep -i 'ok|fail' $1/build.log
+for dir in $*; do
+  echo "* Checking build results in $dir"
+  egrep -i 'ok|fail' $dir/build.log || true
+done
