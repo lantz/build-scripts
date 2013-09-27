@@ -17,10 +17,6 @@ check=$scripts/check-build-dir.sh
 mkdir $dir
 cd $dir
 
-log=/tmp/nightly-$date.log
-echo "* Logging to $log"
-echo "* Mininet Nightly Build Log: $dir" > $log
-
 dists=(precise quantal raring saucy)
 archs=(32 64)
 
@@ -29,6 +25,8 @@ for dist in $dists; do
     target="${dist}${arch}server"
     echo "* Building $target and posting to jenkins"
     $post "mininet-$target" $build $opts $target
+    echo "* Checking build log"
+    $check mn*$target*
   done
 done
 
