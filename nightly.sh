@@ -17,16 +17,17 @@ check=$scripts/check-build-dir.sh
 mkdir $dir
 cd $dir
 
-dists=(precise quantal raring saucy)
-archs=(32 64)
+dists="precise quantal raring saucy"
+archs="32 64"
 
 for dist in $dists; do
-    for arch in $archs ; do
+  for arch in $archs ; do
     target="${dist}${arch}server"
     echo "* Building $target and posting to jenkins"
     $post "mininet-$target" $build $opts $target
-    echo "* Checking build log"
-    $check mn*$target*
+    builddir=mn-$target*
+    echo "* Checking build log for $builddir"
+    echo $check $builddir
   done
 done
 

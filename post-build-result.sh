@@ -37,7 +37,7 @@ export JAVA_OPTS="$CERT $PWD"
 # Command to post build results to jenkins
 export MONITOR=/usr/share/jenkins/external-job-monitor/java/jenkins-core-*.jar
 
-echo "* Posting to Jenkins external build monitor"
+echo "* Starting Jenkins job $BUILD: $CMD"
   $JAVA -jar $MONITOR "$BUILD" $CMD
 
 echo "* Done"
