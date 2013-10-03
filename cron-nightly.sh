@@ -6,4 +6,13 @@ scripts=/home/mininet/build-scripts
 post=$scripts/post-build-result.sh
 nightly=$scripts/nightly.sh
 
-$post 'Mininet Nightly Build' $nightly
+# We log to a separate file to avoid Jenkins timeouts
+
+date=`date +%Y-%m-%d-%a`
+log=/tmp/mininet-build-$date.log
+
+echo "* Logging to $log"
+  $nightly >& $log
+
+echo "* Posting to Jenkins"
+  $post 'Mininet Nightly Build' cat $log

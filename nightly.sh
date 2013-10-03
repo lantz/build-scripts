@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+# We don't set -e because some of the commands may
+# fail or exit with non-zero return codes.
 
 # BL note: the actual cron job is another script which
 # runs this one and posts its output to Jenkins
@@ -27,7 +28,7 @@ for dist in $dists; do
     $post "mininet-$target" $build $opts $target
     builddir=mn-$target*
     echo "* Checking build log for $builddir"
-    echo $check $builddir
+    $post "check-$target" $check $builddir
   done
 done
 
