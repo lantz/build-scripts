@@ -15,6 +15,15 @@ opts='-z --timeout 1800'
 scripts=/home/mininet/build-scripts
 post=$scripts/post-build-result.sh
 check=$scripts/check-build-dir.sh
+maxbuilds=7
+
+# If we have a bunch of builds, remove the oldest first
+if [ `ls -td /build/nightly-* | wc -l` -gt $maxbuilds ]; then
+  oldest=`ls -td /build/nightly-* | head -1`
+  rm -rf $oldest
+fi
+
+# Create new nightly build directory
 mkdir $dir
 cd $dir
 
