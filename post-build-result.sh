@@ -24,15 +24,15 @@ echo "* Build command: $CMD"
 JDIR=/home/mininet/.jenkins
 JUSER=`cat $JDIR/build-user`
 JPWD=`cat $JDIR/build-passwd`
-JENKINS=build.mininet.org
-export JENKINS_HOME=https://$JUSER:$JPWD@$JENKINS/
+JENKINS=localhost:8080
+export JENKINS_HOME=http://$JUSER:$JPWD@$JENKINS/
 
 # Java home and certificates so that we can connect using SSL
 export JAVA_HOME=/usr/lib/jvm/default-java/
 export JAVA=$JAVA_HOME/bin/java
-CERT=-Djavax.net.ssl.trustStore=$JAVA_HOME/jre/lib/security/cacerts
-PWD=-Djavax.net.ssl.trustStorePassword=changeit
-export JAVA_OPTS="$CERT $PWD"
+# CERT=-Djavax.net.ssl.trustStore=$JAVA_HOME/jre/lib/security/cacerts
+# PWD=-Djavax.net.ssl.trustStorePassword=changeit
+# export JAVA_OPTS="$CERT $PWD"
 
 # Command to post build results to jenkins
 export MONITOR=/usr/share/jenkins/external-job-monitor/java/jenkins-core-*.jar
