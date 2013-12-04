@@ -9,19 +9,22 @@
 echo '* Simple Mininet Nightly Build Script'
 
 date=`date +%Y-%m-%d-%a`
-dir=/build/nightly-$date
+builddir=/build
+dir=$builddir/nightly-$date
 build=${HOME}/mininet/util/vm/build.py
 opts='-z --timeout 1800'
 scripts=/home/mininet/build-scripts
 post=$scripts/post-build-result.sh
 check=$scripts/check-build-dir.sh
-maxbuilds=7
+maxbuilds=4
 
 # If we have a bunch of builds, remove the oldest first
-if [ `ls -td /build/nightly-* | wc -l` -gt $maxbuilds ]; then
-  oldest=`ls -td /build/nightly-* | head -1`
-  rm -rf $oldest
-fi
+cd $builddir
+while [ `ls -td nightly-* | wc -l` -gt $maxbuilds ]; do 
+  oldest=`ls -td nightly-* | tail -1`
+  echo "* Removing old build directory $oldest"
+  sudo rm -rf $oldest
+done
 
 # Create new nightly build directory
 mkdir $dir
