@@ -11,12 +11,18 @@ echo '* Simple Mininet Nightly Build Script'
 date=`date +%Y-%m-%d-%a`
 builddir=/build
 dir=$builddir/nightly-$date
-build=${HOME}/mininet/util/vm/build.py
+mndir=${HOME}/mininet
+build=${mndir}/util/vm/build.py
 opts='-z --timeout 1800'
 scripts=/home/mininet/build-scripts
 post=$scripts/post-build-result.sh
 check=$scripts/check-build-dir.sh
-maxbuilds=4
+maxbuilds=3
+
+echo '* Pulling latest build.py'
+  pushd $mndir
+  git pull --rebase
+  popd
 
 # If we have a bunch of builds, remove the oldest first
 cd $builddir
@@ -29,6 +35,8 @@ done
 # Create new nightly build directory
 mkdir $dir
 cd $dir
+
+# Build current master branch
 
 dists="precise quantal raring saucy"
 archs="32 64"
@@ -44,3 +52,22 @@ for dist in $dists; do
   done
 done
 
+# Build stable release
+
+release=2.1.0p1
+dists="raring"
+opts="$opts -b $release"
+
+for dist in $dists; do
+  for arch in $archs; do
+    target="${dist}${arch}server"
+    echo "* Building $target and posting to jenkins"
+    $post "mininet-$release-$target" $build $opts $target
+    builddir=mn-$release-$target*
+    echo "* Checking build log for $builddir"
+    $post "check-$release-$target" $check $builddir
+  done
+done
+
+echo '* Nightly Build Script complete'
+exit 0
