@@ -10,16 +10,21 @@ from time import time
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 
-def callback( transmitted, size ):
-    "Progress callback for set_contents_from_filename"
-    print '\r%d bytes transmitted of %d (%.2f%%)' % (
-        transmitted, size, 100.0 * transmitted / size ),
-    stdout.flush()
 
 def uploadFile( bucket, filename ):
     "Upload a file to a bucket"
     print '* Uploading', filename, 'to bucket', bucket
     start = time()
+    def callback( transmitted, size ):
+        "Progress callback for set_contents_from_filename"
+        elapsed = time() - start
+        percent = 100.0 * transmitted / size
+        kbps = .001 * transmitted / elapsed
+        print ( '\r%d bytes transmitted of %d (%.2f%%),'
+                ' %.2f KB/sec ' %
+                ( transmitted, size, percent, kbps ) ),
+        stdout.flush()
+
     conn = S3Connection()
     bucket = conn.get_bucket( bucket )
     k = Key( bucket )
