@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$1$2" == "" ]; then
+if [ $# -lt 2 ]; then
   echo "Mininet nightly build tester"
   echo "Usage: $0 <day> <flavor> [<test>...]"
   echo "Valid tests include: sanity core examplesquick examples ..."
@@ -20,17 +20,24 @@ for test in $*; do
   tests="$tests --test $test"
 done
 
-image=`eval ls /build/*$day*/*$flavor*/*.vmdk`
+images=`eval ls /build/*$day*/*$flavor*/*.vmdk`
+if [ "$images" != "" ]; then
+  echo "* Found images:"
+  echo $images
+fi
+
 build=~/mininet/util/vm/build.py
 # was: --verbose
 opts=""
 branch=""
 #--branch master"
 
-echo "* Testing $image"
-  cmd="$build $opts $branch $tests --image $image"
-  echo "- $cmd"
-  $cmd
+for image in $images; do
+  echo "* Testing $image"
+    cmd="$build $opts $branch $tests --image $image"
+    echo "- $cmd"
+    $cmd
+  echo "* Done testing $image"
+done
 
-echo "* Done testing $image"
 exit 0
