@@ -54,7 +54,7 @@ done
 
 # Build stable release
 
-release=2.1.0p1
+release=2.1.0p2
 dists="raring"
 opts="$opts -b $release"
 
