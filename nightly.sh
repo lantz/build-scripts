@@ -38,7 +38,7 @@ cd $dir
 
 # Build current master branch
 
-dists="precise quantal raring saucy"
+dists="precise quantal raring saucy trusty"
 archs="32 64"
 
 for dist in $dists; do
