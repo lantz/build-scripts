@@ -21,7 +21,7 @@ echo "* Build name: $BUILD"
 echo "* Build command: $CMD"
 
 # Jenkins user, password, and server URL
-JDIR=/home/mininet/.jenkins
+JDIR=$HOME/.jenkins
 JUSER=`cat $JDIR/build-user`
 JPWD=`cat $JDIR/build-passwd`
 JENKINS=localhost:8080
